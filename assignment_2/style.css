@@ -1,0 +1,35 @@
+html, body {
+    height: 100%;
+}
+
+table {
+    width: 100%;
+    height: 100%;
+}
+
+#canvas_cell {
+    table-layout:fixed;
+    vertical-align: top;
+    width: 50%;
+    height: 50%;
+}
+
+#input_cell {
+    vertical-align: top;
+    padding: 2% 5%;
+}
+
+.input_box_decimal, .input_box_numeric {
+    margin-top: 5px;
+    width: 60%;
+    height: 30px;
+    font-size: 20px;
+    border-style: hidden hidden solid hidden;
+    text-indent: 5mm;
+    text-align: end; 
+}
+
+canvas {
+    width: 40vw;
+    height: 40vw;
+}
