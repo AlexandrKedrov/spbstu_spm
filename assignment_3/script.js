@@ -31,22 +31,31 @@ var Ball = {
 
   phys: function(dt) {
 
-    if (Math.abs(this.impulse[0]) <= dt * 0.5) {
-      this.impulse[0] = 0;
+    if (this.track.length > 0 && this.acc_time == 0) {
+      var prev_impulse = this.track[this.track.length - 1].impulse;
+      var dvx = Math.abs(this.impulse[0] - prev_impulse[0]);
+      var dvy = Math.abs(this.impulse[1] - prev_impulse[1]);
+      var avx = Math.abs(this.impulse[0] + prev_impulse[0]) * 0.5;
+      var avy = Math.abs(this.impulse[1] + prev_impulse[1]) * 0.5;
+      if (dvx <= dt * 0.5 && avx * dt < this.radius * 0.01) {
+        this.impulse[0] = 0;
+      }
+
+      if (dvy <= dt * 0.5 && avy * dt < this.radius * 0.01) {
+        this.impulse[1] = 0;
+      }
     }
 
-    if (Math.abs(this.impulse[1]) <= dt * 0.5) {
-      this.impulse[1] = 0;
+    if (this.current_pos[1] <= this.radius) {
+      this.current_pos[1] = this.radius;
+      if (this.impulse[1] < 0) {
+        this.impulse[1] = 0;
+      }
     }
 
     if (this.impulse[0] != 0 || !(this.impulse[1] <= 0 && this.current_pos[1] == this.radius)) {
       this.current_pos[0] += this.impulse[0] / this.mass * dt;
       this.current_pos[1] += this.impulse[1] / this.mass * dt;
-
-      if (this.current_pos[1] < this.radius) {
-        this.current_pos[1] = this.radius;
-        this.impulse[1] = 0;
-      }
 
       if (this.acc_time > 0) {
         this.track.push({impulse: [0, 0], dt: this.acc_time});
@@ -106,10 +115,13 @@ var Ball = {
 
     ctx.fillStyle = `rgb(${this.track_color[0]}, ${this.track_color[1]}, ${this.track_color[2]})`;
 
+    ctx.textAlign = 'center'
+    ctx.font = '10px serif';
     for (var i = 0; i < points.length; i++) {
       ctx.beginPath();
         ctx.arc(points[i][0] * scale, height - points[i][1] * scale, this.radius * scale * 0.5, 0, 2 * Math.PI);
       ctx.fill();
+      ctx.fillText(`(${points[i][0].toFixed(2)}; ${points[i][1].toFixed(2)})`, points[i][0] * scale, height - points[i][1] * scale - this.radius * scale * 0.5 - 10);
     }
 
     ctx.fillStyle = `rgb(${this.color[0]}, ${this.color[1]}, ${this.color[2]})`;
@@ -125,6 +137,21 @@ function plot(ctx) {
   var height = ctx.canvas.height;
 
   ctx.clearRect(0, 0, width, height);
+
+  ctx.fillStyle = 'red';
+  ctx.fillRect(10, 10, 20, 15);
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(10, 40, 20, 15);
+  ctx.fillStyle = 'green';
+  ctx.fillRect(10, 70, 20, 15);
+
+  ctx.fillStyle = 'black'
+  ctx.textAlign = 'left'
+  ctx.font = '10px serif';
+
+  ctx.fillText('E(t)', 35, 20);
+  ctx.fillText('X\'(t)', 35, 50);
+  ctx.fillText('Y\'(t)', 35, 80);
 
   var t_max = 0;
   var y_max = 0;
@@ -248,7 +275,7 @@ function main() {
   fire.onclick = function() {
     var velocity = parseFloat(velocity_input.value) || 0;
     var angle = parseFloat(angle_input.value) || 0;
-  
+
     angle = angle > 90 ? 90:angle;
     angle = angle / 180 * Math.PI;
 
@@ -256,6 +283,7 @@ function main() {
 
     fired = true;
   }
+
   setInterval(function() {
     if (fired) {
       Ball.apply_force([0, -9.82], dt);
