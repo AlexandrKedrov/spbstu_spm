@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Drawing</title>
+        <script src='script.js'></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td class=canvas_cell>
+                    <canvas id='canvas_example' width="1280px" height="720px" style='border: 1px solid #000000'></canvas>
+                </td>
+                <td id=input_cell>
+                    <h1>Ball canon</h2>
+                    <h2>Velocity</h2>
+                    <input id='velocity_input' class='input_box_decimal' type='text' value=1 inputmode='decimal'><br>
+                    <h2>Angle</h2>
+                    <input id='angle_input' class='input_box_decimal' type='text' value=45 inputmode='numeric'><br>
+                    <input id='fire' type='button' value='Fire'>
+                </td>
+            </tr>
+            <tr>
+              <td class=canvas_cell>
+                <canvas id='canvas_plot' width="1280px" height="720px" style='border: 1px solid #000000'></canvas>
+              </td>
+            </tr>
+        </table>
+    </body>
+</html>
