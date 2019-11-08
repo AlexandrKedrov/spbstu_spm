@@ -17,16 +17,16 @@ function main() {
         this.vx = vx;
         this.vy = vy;
         var that = this;
-    
+
         this.info = function() {
-            console.log('Position: (' + that.x + ', ' + that.y + ')' + 
+            console.log('Position: (' + that.x + ', ' + that.y + ')' +
             '\nVelocity: (' + that.vx + ', ' + that.vy + ')')
         }
-    
+
         this.move = function() {
             that.x += that.vx*dt;
         }
-    
+
         this.draw = function() {
             ctx.beginPath();
             ctx.arc(that.x, that.y, 50, 0, 2 * Math.PI)
@@ -68,7 +68,7 @@ function main() {
 
     function control() {
         phys();
-        draw();       
+        draw();
     }
 
     setInterval(control, 1000*dt);
